@@ -3,6 +3,8 @@
 <title> First Web Application</title>
 </head>
 <body>
-WELCOME ${name} !!! <a href="/list-todos">Click here</a> to manage your to-do's
+Here are list of your todo's
+<br/>
+${todos}
 </body>
 </html> 
