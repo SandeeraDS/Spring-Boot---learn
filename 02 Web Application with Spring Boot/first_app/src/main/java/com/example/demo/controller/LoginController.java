@@ -14,26 +14,26 @@ import com.example.demo.service.LoginService;
 @Controller
 @SessionAttributes("name")
 public class LoginController {
-	
+
 	@Autowired
 	LoginService service;
-	
-	@RequestMapping(value ="/login", method = RequestMethod.GET)
+
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String showLoginPage(ModelMap model) {
 //		model.put("name", name);
 //		System.out.println("name is "+name);
 		return "login";
 	}
-	
+
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String showWelcomePage(@RequestParam String name, @RequestParam String password, ModelMap model) {
 		boolean isValidUser = service.validateUser(name, password);
-		
+
 		if (!isValidUser) {
-			model.put("errorMessage","Invalid Creaditials");
+			model.put("errorMessage", "Invalid Creaditials");
 			return "login";
 		}
-		
+
 		model.put("name", name);
 		model.put("password", password);
 //		System.out.println("name is "+name);
