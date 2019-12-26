@@ -11,11 +11,13 @@
 
 		<form:form method="post" modelAttribute="todo">
 			<fieldset class="form-group">
-				<form:label path="desc">Description</form:label> 
-				<form:input path="desc" type="text" name="desc" class="form-control" required="required"/>
+				<form:hidden path="id" />
+				<form:label path="desc">Description</form:label>
+				<form:input path="desc" type="text" name="desc" class="form-control"
+					required="required" />
 				<form:errors path="desc" cssClass="text-warning"></form:errors>
 			</fieldset>
-			<button class="btn btn-success" type="submit"> Add</button>
+			<button class="btn btn-success" type="submit">Add</button>
 		</form:form>
 	</div>
 	<script src="webjars/jquery/1.9.1/jquery.min.js"></script>
