@@ -17,7 +17,7 @@
 		<fieldset class="form-group">
 
 			<form:label path="targetDate">Target Date</form:label>
-			<form:input path="targetDate" type="text" name="desc" id=""
+			<form:input path="targetDate" type="text" name="desc" id="targetDate"
 				class="form-control" required="required" />
 			<form:errors path="targetDate" cssClass="text-warning"></form:errors>
 		</fieldset>
