@@ -7,6 +7,8 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -15,13 +17,12 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.example.demo.model.Todo;
 import com.example.demo.service.TodoService;
 
 @Controller
-@SessionAttributes("name")
+//@SessionAttributes("name") - now we get user name using priciple
 public class TodoController {
 
 	@Autowired
@@ -36,19 +37,24 @@ public class TodoController {
 
 	@RequestMapping(value = "/list-todos", method = RequestMethod.GET)
 	public String showTodosList(ModelMap model) {
-		String name = getLoggedInUserName(model);
+		String name = getLoggedInUserName();
 		model.put("todos", service.retrieveTodos(name));
 		model.put("name", name);
 		return "list-todos";
 	}
 
-	private String getLoggedInUserName(ModelMap model) {
-		return (String) model.get("name");
+	private String getLoggedInUserName() {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		if (principal instanceof UserDetails) {
+			return ((UserDetails) principal).getUsername();
+		}
+		return principal.toString();
 	}
 
 	@RequestMapping(value = "/add-todo", method = RequestMethod.GET)
 	public String showAddTodoPage(ModelMap model) {
-		model.addAttribute("todo", new Todo(0, getLoggedInUserName(model), "Default Desc", new Date(), false));
+		model.addAttribute("todo", new Todo(0, getLoggedInUserName(), "Default Desc", new Date(), false));
 		return "todo";
 	}
 
@@ -71,7 +77,7 @@ public class TodoController {
 		if (result.hasErrors()) {
 			return "todo";
 		}
-		todo.setUser(getLoggedInUserName(model));
+		todo.setUser(getLoggedInUserName());
 		service.updateTodo(todo);
 		return "redirect:/list-todos";
 	}
@@ -88,7 +94,7 @@ public class TodoController {
 		if (result.hasErrors()) {
 			return "todo";
 		}
-		service.addTodo(getLoggedInUserName(model), todo.getDesc(), todo.getTargetDate(), false);
+		service.addTodo(getLoggedInUserName(), todo.getDesc(), todo.getTargetDate(), false);
 		return "redirect:/list-todos";
 	}
 
