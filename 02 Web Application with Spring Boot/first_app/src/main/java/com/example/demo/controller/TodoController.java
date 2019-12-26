@@ -60,6 +60,9 @@ public class TodoController {
 
 	@RequestMapping(value = "/delete-todo", method = RequestMethod.GET)
 	public String deleteAddTodo(@RequestParam int id) {
+//		to show exception handling working
+		if (id == 1)
+			throw new RuntimeException("Something went wrong");
 		service.deleteTodo(id);
 		return "redirect:/list-todos";
 	}
